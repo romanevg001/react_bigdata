@@ -1,0 +1,17 @@
+ul { 
+    display: flex;
+    flex-wrap: wrap;
+    li {
+        list-style: none;
+        color: #535bf2;
+        margin: 0 5px;
+        font-size: 12px;
+        padding: 0 5px;
+
+       cursor: pointer;
+    }
+
+}
+.active {
+    border: hsl(237, 86%, 64%) 1px solid;
+}
