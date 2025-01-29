@@ -1,26 +1,23 @@
-import { useUsers } from "./useLoadUsers";
+import { useUsers } from "./users-hooks";
 import { useAppSelector } from "../store";
 import { Pagination } from "../Pagination/Pagination";
 import { usePagination } from "../Pagination/usePagination";
+import { UserCard } from "./UserCard";
+import { useEffect } from "react";
 
 function Users() {
-  const users = useAppSelector((state) => state.users.users);
   const user = useAppSelector((state) => state.users.user);
   const [onSort, getUserById] = useUsers();
-  const [listSlice, pagesList,onSetActive, activePage ] = usePagination<typeof users.linkedList>({list: users, countPerPage:50})
+  const [listSlice, pagesList,onSetActive, activePage ] = usePagination<typeof users.linkedList>({list: useAppSelector((state) => state.users.users), countPerPage:50})
 
+  console.log('render user')
+  useEffect(()=>{ console.log('render listSlice')},[listSlice])
   return (
     <>
       <Pagination pagesList={pagesList} onSetActive={onSetActive} activePage={activePage}></Pagination>
       
-      <div className="card">
-        <p>
-          #{user?.id} {user?.name} <i>({user?.username})</i>
-        </p>
-        <p>
-          phone: {user?.phone}, email: {user?.email}
-        </p>
-      </div>
+     { user && <UserCard user={user} /> } 
+
       <table>
         <thead>
           <tr key="h">
