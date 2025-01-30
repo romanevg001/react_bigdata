@@ -30,5 +30,5 @@ export function useUsers() {
     dispatch(getUser(data));
   };
 
-  return [onSort, getUserById];
+  return {onSort, getUserById};
 }

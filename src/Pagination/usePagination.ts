@@ -5,7 +5,7 @@ export interface IUsePaginationProps<T> {
   countPerPage: number;
 }
 export function usePagination<T>({ list,  countPerPage}: IUsePaginationProps<T>): [
-  typeof listSlice,
+  typeof inlist,
   typeof pagesList,
   typeof onSetActive,
   typeof activePage

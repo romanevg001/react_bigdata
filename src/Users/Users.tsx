@@ -1,14 +1,15 @@
 import { useUsers } from "./users-hooks";
-import { useAppSelector } from "../store";
+import {  useAppSelector } from "../store";
 import { Pagination } from "../Pagination/Pagination";
 import { usePagination } from "../Pagination/usePagination";
 import { UserCard } from "./UserCard";
 import { useEffect } from "react";
+import { IUsersLL } from "../store/userslice";
+import { UserItem } from "./UserItem";
 
 function Users() {
-  const user = useAppSelector((state) => state.users.user);
-  const [onSort, getUserById] = useUsers();
-  const [listSlice, pagesList,onSetActive, activePage ] = usePagination<typeof users.linkedList>({list: useAppSelector((state) => state.users.users), countPerPage:50})
+  const {onSort} = useUsers();
+  const [listSlice, pagesList,onSetActive, activePage ] = usePagination<IUsersLL>({list: useAppSelector((state) => state.users.users), countPerPage:50})
 
   console.log('render user')
   useEffect(()=>{ console.log('render listSlice')},[listSlice])
@@ -16,7 +17,7 @@ function Users() {
     <>
       <Pagination pagesList={pagesList} onSetActive={onSetActive} activePage={activePage}></Pagination>
       
-     { user && <UserCard user={user} /> } 
+     <UserCard /> 
 
       <table>
         <thead>
@@ -37,21 +38,9 @@ function Users() {
           </tr>
         </thead>
         <tbody>
-            {listSlice?.map((user, i) => (
-                user ?
-                    <tr key={user.id}>
-                        <td>{++i}</td>
-                        <td>{user.id}</td>
-                        <td>{user.name}</td>
-                        <td>{user.username}</td>
-                        <td>{user.phone}</td>
-                        <td>{user.email}</td>
-                        <td>
-                            <button onClick={() => getUserById(user.id)}>
-                            getUserById
-                            </button>
-                        </td>
-                    </tr>
+            {listSlice?.map((inUser, i) => (
+                inUser ?
+                    <UserItem user={inUser} i={i} />
                 :
                     <></>
                 ))}

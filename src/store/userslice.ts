@@ -42,7 +42,7 @@ const initialState: IUsersState = {
   user: undefined
 };
 /*==========================================*/
-interface IUsersLL {
+export interface IUsersLL {
     linkedList: DoublyLinkedList<IUser>
 }
 class UsersLL implements IUsersLL {
@@ -147,6 +147,9 @@ export const usersSlice = createSlice({
     getUser: (state, action: PayloadAction<number>) => {
      
          state.user = state.users.linkedList.find(user => user.id == action.payload)
+
+        console.log('state.user',state.user);
+
          //state.user = state.users.find(user => user.id == action.payload)
       
     },
