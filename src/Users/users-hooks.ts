@@ -1,34 +1,59 @@
 import { useEffect } from "react";
 import {
   setUsers,
-  sortUsers,
+  setUsersll,
   UserSortedType,
   getUser,
+  sortUsersll,
+  getUserll,
+  stored,
+  sortUsers
 } from "../store/userslice";
 import { useAppDispatch } from "../store";
+import { userGenerator, userGeneratorLL } from "../dataGenerator";
+
+export function useLoadUsersll() {
+  const dispatch = useAppDispatch();
+    useEffect(() => {
+      dispatch(setUsersll(userGeneratorLL()));
+  }, []);
+}
+
+export function useUsersll() {
+  const dispatch = useAppDispatch();
+
+  const onSort = (data: UserSortedType) => {
+    dispatch(sortUsersll(data));
+  };
+
+  const getUserById = (data: number) => {
+    dispatch(getUserll(data));
+  };
+
+  return {onSort, getUserById};
+}
+
+
 
 export function useLoadUsers() {
   const dispatch = useAppDispatch();
   useEffect(() => {
-    /* fetch("https://jsonplaceholder.typicode.com/users/", { method: "GET" })
-      .then((response) => response.json())
-      .then((data) => {
-        dispatch(setUsers(data));
-      }); */
-      dispatch(setUsers({}));
+    dispatch(stored({ users: userGenerator()}));
+    //  dispatch(setUsers(userGenerator()));
   }, []);
 }
 
 export function useUsers() {
   const dispatch = useAppDispatch();
 
-  const onSort = (data: UserSortedType) => {
+   const onSort = (data: UserSortedType) => {
     dispatch(sortUsers(data));
-  };
+  }; 
+  
 
   const getUserById = (data: number) => {
     dispatch(getUser(data));
   };
 
-  return {onSort, getUserById};
+  return {getUserById, onSort};
 }

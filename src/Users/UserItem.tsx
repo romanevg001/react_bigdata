@@ -6,11 +6,8 @@ import { useUsers } from "./users-hooks";
 export const UserItem = memo(({user, i}: {user: IUser, i: number}) =>{
   const {getUserById} = useUsers();
 
-  console.log('render UserItem')
-  
-
     return (
-        <tr key={user.id}>
+        <tr>
             <td>{++i}</td>
             <td>{user.id}</td>
             <td>{user.name}</td>

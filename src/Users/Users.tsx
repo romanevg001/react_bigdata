@@ -1,50 +1,58 @@
-import { useUsers } from "./users-hooks";
-import {  useAppSelector } from "../store";
-import { Pagination } from "../Pagination/Pagination";
-import { usePagination } from "../Pagination/usePagination";
+import { useAppSelector } from "../store";
 import { UserCard } from "./UserCard";
-import { useEffect } from "react";
-import { IUsersLL } from "../store/userslice";
+import { UserSortedType, usersSlice, IUser } from "../store/userslice";
 import { UserItem } from "./UserItem";
+import { useState } from "react";
+import { useLoadUsers, useUsers } from "./users-hooks";
+import { usePagination } from "../Pagination/usePagination";
 
 function Users() {
-  const {onSort} = useUsers();
-  const [listSlice, pagesList,onSetActive, activePage ] = usePagination<IUsersLL>({list: useAppSelector((state) => state.users.users), countPerPage:50})
+  // slow
+  // const {onSort} = useUsers();
+  //const [listSlice, pagesList,onSetActive, activePage ] = usePagination<IUser[]>({list: useAppSelector((state) => state.users.users), countPerPage:50})
 
-  console.log('render user')
-  useEffect(()=>{ console.log('render listSlice')},[listSlice])
+  // fast
+  const [sortType, onSort] = useState<UserSortedType>({type:'asc', field:'name'});
+   const sortedUsers = useAppSelector((state) =>
+    usersSlice.selectors.selectSortedUsers(state, sortType)
+  ); 
+  useLoadUsers()
+
   return (
     <>
-      <Pagination pagesList={pagesList} onSetActive={onSetActive} activePage={activePage}></Pagination>
-      
-     <UserCard /> 
+  {/*     <Pagination
+        pagesList={pagesList}
+        onSetActive={onSetActive}
+        activePage={activePage}
+      ></Pagination>
+ */}
+      <UserCard />
 
       <table>
         <thead>
           <tr key="h">
             <th>#</th>
-            <th>id <span onClick={() => onSort("id")}>sort</span></th>
             <th>
-              name <span onClick={() => onSort("name")}>sort</span>
+              id <span onClick={() => onSort({type:'asc', field:'id'})}>asc</span> <span onClick={() => onSort({type:'desc', field:'id'})}>desc</span>
             </th>
             <th>
-              username <span onClick={() => onSort("username")}>sort</span>
+              name <span onClick={() => onSort({type:'asc', field:'name'})}>asc</span> <span onClick={() => onSort({type:'desc', field:'name'})}>desc</span>
+            </th>
+            <th>
+              username <span onClick={() => onSort({type:'asc', field:'username'})}>asc</span> <span onClick={() => onSort({type:'desc', field:'username'})}>desc</span>
             </th>
             <th>phone</th>
             <th>
-              email <span onClick={() => onSort("email")}>sort</span>
+              email <span onClick={() => onSort({type:'asc', field:'email'})}>asc</span> <span onClick={() => onSort({type:'desc', field:'email'})}>desc</span>
             </th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-            {listSlice?.map((inUser, i) => (
-                inUser ?
-                    <UserItem user={inUser} i={i} />
-                :
-                    <></>
-                ))}
-            
+          {sortedUsers?.map(
+            (inUser, i) =>
+              inUser && <UserItem key={inUser.id} user={inUser} i={i} />
+          )}
         </tbody>
       </table>
     </>

@@ -18,11 +18,11 @@ export const Pagination = memo(({pagesList, onSetActive, activePage}:IPagination
     const rightPart = rightPartK > 1 && pagesList[end] !== pagesList[pagesList.length - 1] ? [ pagesList.length - rightPartK*2, pagesList.length - rightPartK, pagesList.length] :[];
 
     return (<ul>
-        {leftPart.map(el=>(<li onClick={()=>onSetActive(el)} className={activePage == el? styles.active:''}>{el}</li>))}
+        {leftPart.map(el=>(<li key={'p'+el} onClick={()=>onSetActive(el)} className={activePage == el? styles.active:''}>{el}</li>))}
         { !!leftPart.length && <li>...</li>}
-        {centralPart.map(el=>(<li onClick={()=>onSetActive(el)} className={activePage == el? styles.active:''}>{el}</li>))}
+        {centralPart.map(el=>(<li key={'p'+el} onClick={()=>onSetActive(el)} className={activePage == el? styles.active:''}>{el}</li>))}
         { !!rightPart.length && (<li>...</li>)}
-        {rightPart.map(el=>(<li onClick={()=>onSetActive(el)} className={activePage == el? styles.active:''}>{el}</li>))}
+        {rightPart.map(el=>(<li key={'p'+el} onClick={()=>onSetActive(el)} className={activePage == el? styles.active:''}>{el}</li>))}
         </ul>)
 });
 
