@@ -3,12 +3,10 @@ import { UserCard } from "./UserCard";
 import { UserSortedType, usersSlice, IUser } from "../store/userslice";
 import { UserItem } from "./UserItem";
 import { useState } from "react";
-import { useLoadUsers, useUsers } from "./users-hooks";
+import { useLoadEntities, useUsers } from "./users-hooks";
 import { usePagination } from "../Pagination/usePagination";
 
-function Users() {
-  useLoadUsers()
-
+function Entities() {
   // slow
   // const {onSort} = useUsers();
   //const [listSlice, pagesList,onSetActive, activePage ] = usePagination<IUser[]>({list: useAppSelector((state) => state.users.users), countPerPage:50})
@@ -16,8 +14,9 @@ function Users() {
   // fast
   const [sortType, onSort] = useState<UserSortedType>({type:'asc', field:'name'});
    const sortedUsers = useAppSelector((state) =>
-    usersSlice.selectors.selectorUsers(state, sortType)
+    usersSlice.selectors.selectSortedEntities(state, sortType)
   ); 
+  useLoadEntities()
 
   return (
     <>
@@ -60,4 +59,4 @@ function Users() {
   );
 }
 
-export default Users;
+export default Entities;

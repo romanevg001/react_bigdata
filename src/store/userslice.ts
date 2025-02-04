@@ -83,28 +83,31 @@ export const usersSlice = createSlice({
   initialState,
   selectors: {
     selectorSortUsersll: createSelector(
-      (state: IUsersState) => state.usersll,
+      (state: IUsersState) => state.usersll.linkedList,
       (_: IUsersState, sort) => sort,
       (usersll, {type, field}) =>{
+       if (!usersll.length) return new DoublyLinkedList<IUser>();
      
       const st = performance.now();
-        const x = new UsersLL(usersll.linkedList.sort((a, b) => {
+        const x = usersll.sort((a, b) => {
             if (type === "asc") {
               return a[field] > b[field] ? 1 : -1;
             } else {
               return b[field] > a[field] ? 1 : -1;
             }
           }).slice(0, 50)
-        );
-      console.log(performance.now() - st);
+        ;
+      console.log('usersll: ',field,':',type,' - ',performance.now() - st);
       return x;
     }),
     selectSelectedUserId: (state) => state.selectedUserId,
-    selectSortedUsers: createSelector(
+    selectSortedEntities: createSelector(
       (state: IUsersState) => state.ids,
       (state: IUsersState) => state.entities,
       (_: IUsersState, sort) => sort,
       (ids, entities, { type, field }) => {
+        if (!ids.length) return [];
+
         const st = performance.now();
         const x = ids
           .map((id) => entities[id])
@@ -116,7 +119,26 @@ export const usersSlice = createSlice({
             }
           })
           .slice(0, 50);
-        console.log(performance.now() - st);
+        console.log('entities: ',field,':',type,' - ',performance.now() - st);
+        return x;
+      }
+    ),
+    selectorUsers: createSelector(
+      (state: IUsersState) => state.users,
+      (_: IUsersState, sort) => sort,
+      (users, { type, field }) => {
+        if (!users.length) return [];
+
+        const st = performance.now();
+        const x = users.toSorted((a, b) => {
+            if (type === "asc") {
+              return a[field] > b[field] ? 1 : -1;
+            } else {
+              return b[field] > a[field] ? 1 : -1;
+            }
+          })
+          .slice(0, 50);
+        console.log('users: ',field,':',type,' - ',performance.now() - st);
         return x;
       }
     ),
@@ -174,7 +196,7 @@ export const usersSlice = createSlice({
       state.user = state.users.find((user) => user.id == action.payload);
       console.log(performance.now() - st);
     },
-    stored: (state, action: PayloadAction<{ users: IUser[] }>) => {
+    setEntities: (state, action: PayloadAction<{ users: IUser[] }>) => {
       const { users } = action.payload;
 
       state.entities = users.reduce((acc, user) => {
@@ -187,7 +209,7 @@ export const usersSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setUsers, setUsersll, getUser, sortUsersll, getUserll, stored, sortUsers } =
+export const { setUsers, setUsersll, getUser, sortUsersll, getUserll, setEntities, sortUsers } =
   usersSlice.actions;
 
 export default usersSlice.reducer;

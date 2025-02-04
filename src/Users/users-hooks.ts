@@ -6,7 +6,7 @@ import {
   getUser,
   sortUsersll,
   getUserll,
-  stored,
+  setEntities,
   sortUsers
 } from "../store/userslice";
 import { useAppDispatch } from "../store";
@@ -33,16 +33,22 @@ export function useUsersll() {
   return {onSort, getUserById};
 }
 
+/*===========================================================*/
 
+export function useLoadEntities() {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(setEntities({ users: userGenerator()}));
+  }, []);
+}
+/**============================================================== */
 
 export function useLoadUsers() {
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(stored({ users: userGenerator()}));
-    //  dispatch(setUsers(userGenerator()));
+      dispatch(setUsers(userGenerator()));
   }, []);
 }
-
 export function useUsers() {
   const dispatch = useAppDispatch();
 

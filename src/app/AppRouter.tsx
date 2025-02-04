@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
 import './App.css'
+import Entities from '../Users/Entities';
 /* import { ProgressSpinner } from 'primereact/progressspinner';
 import { ErrorBoundary } from './error/ErrorBoundary';
   <ErrorBoundary>
@@ -15,12 +16,14 @@ const Usersll = lazy(() => import('../Users/Usersll'));
 const AppRouter = () => {
   return (
   <>
-        <Link to="/">Usersll</Link> -
-        <Link to="/users">Users</Link>
+        <Link to="/">Usersll</Link> |
+        <Link to="/users">Users</Link> |
+        <Link to="/entities">Entities</Link>
 
   
         <Routes>
           <Route path="/" element={<Usersll />} />
+          <Route path="/entities" element={<Entities />} />
           <Route path="/users" element={<Users />} />
          
         </Routes>

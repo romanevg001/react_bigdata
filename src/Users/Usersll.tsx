@@ -16,7 +16,7 @@ import { useState } from "react";
     const [sortType, onSort] = useState<UserSortedType>({type:'asc', field:'name'});
     const sortedUsers = useAppSelector((state) =>
       usersSlice.selectors.selectorSortUsersll(state, sortType)
-    ).linkedList; 
+    ); 
     
     useLoadUsersll();
   
