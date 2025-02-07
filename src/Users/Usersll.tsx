@@ -17,6 +17,8 @@ import { useState } from "react";
     const sortedUsers = useAppSelector((state) =>
       usersSlice.selectors.selectorSortUsersll(state, sortType)
     ); 
+      const {getUserById} = useUsersll();
+    
     
     useLoadUsersll();
   
@@ -46,7 +48,7 @@ import { useState } from "react";
           </thead>
           <tbody>
               {sortedUsers?.map((inUser, i) => (
-                  inUser && <UserItem  key={inUser.id} user={inUser} i={i} />
+                  inUser && <UserItem  key={inUser.id} user={inUser} i={i} getUserById={getUserById} />
                  
                 ))}
               

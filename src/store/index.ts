@@ -5,6 +5,7 @@ export const store = configureStore({
   reducer: {
     users: usersReducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

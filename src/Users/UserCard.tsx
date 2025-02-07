@@ -13,6 +13,9 @@ export const UserCard = memo(() =>{
         <p>
           phone: {user?.phone}, email: {user?.email}
         </p>
+        <p>
+          friends: [{user?.friends.map(fr=>(<span key={fr}>{fr}, </span>))}]
+        </p>
       </div>
   );
 });

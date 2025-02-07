@@ -2,7 +2,7 @@ import { useAppSelector } from "../store";
 import { UserCard } from "./UserCard";
 import { UserSortedType, usersSlice, IUser } from "../store/userslice";
 import { UserItem } from "./UserItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLoadUsers, useUsers } from "./users-hooks";
 import { usePagination } from "../Pagination/usePagination";
 
@@ -14,10 +14,18 @@ function Users() {
   //const [listSlice, pagesList,onSetActive, activePage ] = usePagination<IUser[]>({list: useAppSelector((state) => state.users.users), countPerPage:50})
 
   // fast
+  const [friends, setFriends] = useState<IUser | undefined>();
   const [sortType, onSort] = useState<UserSortedType>({type:'asc', field:'name'});
    const sortedUsers = useAppSelector((state) =>
     usersSlice.selectors.selectorUsers(state, sortType)
   ); 
+
+  const {getUserById} = useUsers();
+
+
+  useEffect(()=>{
+    console.log('friends',friends)
+  },[friends])
 
   return (
     <>
@@ -52,7 +60,7 @@ function Users() {
         <tbody>
           {sortedUsers?.map(
             (inUser, i) =>
-              inUser && <UserItem key={inUser.id} user={inUser} i={i} />
+              inUser && <UserItem key={inUser.id} user={inUser} i={i} friends={friends} setFriends={setFriends} getUserById={getUserById} />
           )}
         </tbody>
       </table>

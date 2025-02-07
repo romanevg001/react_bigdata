@@ -20,7 +20,7 @@ export interface IAddress {
   zipcode: string;
   geo: IGeo;
 }
-type UserId = number;
+export type UserId = number;
 
 export interface IUser {
   id: UserId;
@@ -29,6 +29,8 @@ export interface IUser {
   email: string;
   phone: string;
   website: string;
+  friends: UserId[];
+  isFriend: (id: UserId) => boolean;
 }
 /*==========================================*/
 export interface IUsersLL {
@@ -85,21 +87,30 @@ export const usersSlice = createSlice({
     selectorSortUsersll: createSelector(
       (state: IUsersState) => state.usersll.linkedList,
       (_: IUsersState, sort) => sort,
-      (usersll, {type, field}) =>{
-       if (!usersll.length) return new DoublyLinkedList<IUser>();
-     
-      const st = performance.now();
-        const x = usersll.sort((a, b) => {
+      (usersll, { type, field }) => {
+        if (!usersll.length) return new DoublyLinkedList<IUser>();
+
+        const st = performance.now();
+        const x = usersll
+          .sort((a, b) => {
             if (type === "asc") {
               return a[field] > b[field] ? 1 : -1;
             } else {
               return b[field] > a[field] ? 1 : -1;
             }
-          }).slice(0, 50)
-        ;
-      console.log('usersll: ',field,':',type,' - ',performance.now() - st);
-      return x;
-    }),
+          })
+          .slice(0, 50);
+        console.log(
+          "usersll: ",
+          field,
+          ":",
+          type,
+          " - ",
+          performance.now() - st
+        );
+        return x;
+      }
+    ),
     selectSelectedUserId: (state) => state.selectedUserId,
     selectSortedEntities: createSelector(
       (state: IUsersState) => state.ids,
@@ -119,7 +130,14 @@ export const usersSlice = createSlice({
             }
           })
           .slice(0, 50);
-        console.log('entities: ',field,':',type,' - ',performance.now() - st);
+        console.log(
+          "entities: ",
+          field,
+          ":",
+          type,
+          " - ",
+          performance.now() - st
+        );
         return x;
       }
     ),
@@ -130,7 +148,8 @@ export const usersSlice = createSlice({
         if (!users.length) return [];
 
         const st = performance.now();
-        const x = users.toSorted((a, b) => {
+        const x = users
+          .toSorted((a, b) => {
             if (type === "asc") {
               return a[field] > b[field] ? 1 : -1;
             } else {
@@ -138,7 +157,7 @@ export const usersSlice = createSlice({
             }
           })
           .slice(0, 50);
-        console.log('users: ',field,':',type,' - ',performance.now() - st);
+        console.log("users: ", field, ":", type, " - ", performance.now() - st);
         return x;
       }
     ),
@@ -168,19 +187,23 @@ export const usersSlice = createSlice({
       );
       console.log(performance.now() - st);
     },
-    sortUsers: (state, {payload: {field, type}}: PayloadAction<UserSortedType>) => {
-//slow
+    sortUsers: (
+      state,
+      { payload: { field, type } }: PayloadAction<UserSortedType>
+    ) => {
+      //slow
       const st = performance.now();
       state.users = state.ids
-          .map((id) => state.entities[id])
-          .sort((a, b) => {
-            if (type === "asc") {
-              return a[field] > b[field] ? 1 : -1;
-            } else {
-              return b[field] > a[field] ? 1 : -1;
-            }
-          }).slice(0,50)
-        console.log( performance.now() - st);
+        .map((id) => state.entities[id])
+        .sort((a, b) => {
+          if (type === "asc") {
+            return a[field] > b[field] ? 1 : -1;
+          } else {
+            return b[field] > a[field] ? 1 : -1;
+          }
+        })
+        .slice(0, 50);
+      console.log(performance.now() - st);
     },
 
     getUserll: (state, action: PayloadAction<number>) => {
@@ -209,7 +232,14 @@ export const usersSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setUsers, setUsersll, getUser, sortUsersll, getUserll, setEntities, sortUsers } =
-  usersSlice.actions;
+export const {
+  setUsers,
+  setUsersll,
+  getUser,
+  sortUsersll,
+  getUserll,
+  setEntities,
+  sortUsers,
+} = usersSlice.actions;
 
 export default usersSlice.reducer;
